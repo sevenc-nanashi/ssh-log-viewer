@@ -1,43 +1,68 @@
 {
   "name": "ssh-log-viewer",
-  "version": "0.1.0",
-  "private": true,
-  "dependencies": {
-    "@testing-library/jest-dom": "^5.16.4",
-    "@testing-library/react": "^12.1.4",
-    "@testing-library/user-event": "^13.5.0",
-    "@types/jest": "^27.4.1",
-    "@types/node": "^16.11.26",
-    "@types/react": "^17.0.44",
-    "@types/react-dom": "^17.0.15",
+  "productName": "SSH Log Viewer",
+  "description": "View Logs over SSH.",
+  "author": "Nanashi. (@sevenc-nanashi, sevenc7c.com)",
+  "version": "1.0.0",
+  "license": "MIT",
+  "main": "dist/main.js",
+  "scripts": {
+    "predev": "rimraf dist",
+    "dev": "run-p dev:*",
+    "dev:tsc": "tsc -w -p tsconfig.main.json",
+    "dev:webpack": "cross-env NODE_ENV=\"development\" webpack --progress",
+    "dev:electron": "wait-on ./dist/main.js && wait-on ./dist/index.html && cross-env NODE_ENV=\"development\" electron .",
+    "lint": "eslint --ext .js,.ts,.tsx src",
+    "prebuild": "rimraf dist build",
+    "build": "run-s build:webpack build:electron",
+    "build:webpack": "cross-env NODE_ENV=\"production\" webpack --progress",
+    "build:electron": "cross-env NODE_ENV=\"production\" electron-builder --win --x64"
+  },
+  "devDependencies": {
+    "@colors/colors": "^1.5.0",
+    "@fluentui/react-icons": "^2.0.153-canary.0",
+    "@fluentui/react-make-styles": "^9.0.0-beta.4",
+    "electron-store": "^8.0.1",
     "react": "^18.0.0",
     "react-dom": "^18.0.0",
+    "react-router": "^6.3.0",
+    "react-router-dom": "^6.3.0",
     "react-scripts": "5.0.0",
+    "short-uuid": "^4.2.0",
+    "@types/history": "2.0.45",
+    "@types/node": "^17.0.24",
+    "@types/optimize-css-assets-webpack-plugin": "^5.0.5",
+    "@types/react": "^18.0.1",
+    "@types/react-dom": "^18.0.0",
+    "@typescript-eslint/eslint-plugin": "^5.19.0",
+    "@typescript-eslint/parser": "^5.19.0",
+    "autoprefixer": "^10.4.4",
+    "cross-env": "^7.0.3",
+    "electron": "^18.0.3",
+    "electron-builder": "^23.0.3",
+    "electron-reload": "^2.0.0-alpha.1",
+    "eslint": "8.13.0",
+    "eslint-config-prettier": "^8.5.0",
+    "eslint-config-standard": "^16.0.3",
+    "eslint-plugin-import": "2.22.1",
+    "eslint-plugin-node": "11.1.0",
+    "eslint-plugin-prettier": "^4.0.0",
+    "eslint-plugin-promise": "^4.2.1 || ^5.0.0",
+    "eslint-plugin-react": "^7.29.4",
+    "html-webpack-plugin": "^5.5.0",
+    "mini-css-extract-plugin": "^2.6.0",
+    "npm-run-all": "^4.1.5",
+    "optimize-css-assets-webpack-plugin": "^6.0.1",
+    "postcss": "^8.4.12",
+    "postcss-loader": "^6.2.1",
+    "prettier": "^2.6.2",
+    "rimraf": "^3.0.2",
+    "tailwindcss": "^3.0.23",
+    "ts-loader": "^9.2.8",
+    "ts-node": "^10.7.0",
     "typescript": "^4.6.3",
-    "web-vitals": "^2.1.4"
-  },
-  "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
-    "test": "react-scripts test",
-    "eject": "react-scripts eject"
-  },
-  "eslintConfig": {
-    "extends": [
-      "react-app",
-      "react-app/jest"
-    ]
-  },
-  "browserslist": {
-    "production": [
-      ">0.2%",
-      "not dead",
-      "not op_mini all"
-    ],
-    "development": [
-      "last 1 chrome version",
-      "last 1 firefox version",
-      "last 1 safari version"
-    ]
+    "wait-on": "^6.0.1",
+    "webpack": "^5.72.0",
+    "webpack-cli": "^4.9.2"
   }
 }

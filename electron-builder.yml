@@ -1,0 +1,13 @@
+appId: "com.sevenc7c.ssh-log-viewer"
+productName: "SSH Log Viewer"
+copyright: "Copyright © 2022 Nanashi. (@sevenc-nanashi, sevenc7c.com)"
+files:
+  - dist/**
+directories:
+  output: build
+win:
+  target: [ "nsis", "portable" ]
+  publisherName: "Nanashi. (@sevenc-nanashi, sevenc7c.com)"
+
+extraMetadata:
+  main: "./dist/main.js"

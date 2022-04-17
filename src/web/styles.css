@@ -1,0 +1,94 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+input, select {
+  outline: none;
+}
+
+.title {
+  @apply text-2xl text-blue-500
+}
+
+.input {
+  @apply border-2 rounded p-1 w-full px-2 bg-white border-gray-200 dark:border-gray-500 dark:bg-gray-600
+}
+
+.input:focus, .input:active {
+  @apply border-blue-500
+}
+
+.form-element {
+  @apply mt-2
+}
+
+.error {
+  @apply !border-red-500
+}
+
+.button-primary {
+  @apply bg-blue-500 hover:bg-blue-400 dark:hover:bg-blue-600 text-white rounded
+}
+
+.button-primary-outlined {
+  @apply outline-blue-500 hover:outline-blue-400 dark:hover:outline-blue-600 text-blue-500 hover:text-blue-400 dark:hover:text-blue-600 rounded outline outline-2 outline-offset-[-2px]
+}
+
+.button-secondary {
+  @apply bg-gray-500 hover:bg-gray-400 dark:hover:bg-gray-600 text-white rounded
+}
+
+.button-secondary-outlined {
+  @apply outline-gray-500 hover:outline-gray-400 hover:dark:outline-gray-600 text-gray-500 hover:text-gray-400 dark:text-white hover:dark:text-gray-100 outline outline-2 outline-offset-[-2px] rounded
+}
+
+.button-danger {
+  @apply bg-red-500 hover:bg-red-400 dark:hover:bg-red-600 text-white rounded
+}
+
+@keyframes card-updated {
+  0% {
+    background-color: theme("colors.blue.200");
+  }
+  50% {
+    background-color: theme("colors.blue.200");
+  }
+  100% {
+    background-color: theme("colors.blue.100");
+  }
+}
+
+@keyframes card-updated-dark {
+  0% {
+    background-color: theme("colors.blue.800");
+  }
+  50% {
+    background-color: theme("colors.blue.800");
+  }
+  100% {
+    background-color: theme("colors.blue.900");
+  }
+}
+
+
+.card-updated {
+  animation-name: card-updated;
+  animation-duration: 0.5s;
+  animation-timing-function: ease-in;
+  animation-iteration-count: 1;
+  animation-fill-mode: forwards;
+}
+
+@media(prefers-color-scheme: dark) {
+  .card-updated {
+    animation-name: card-updated-dark;
+    animation-duration: 0.5s;
+    animation-timing-function: ease-in;
+    animation-iteration-count: 1;
+    animation-fill-mode: forwards;
+  }
+}
+
+svg {
+  transform: translateY(-2px)
+}
