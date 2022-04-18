@@ -8,10 +8,16 @@ interface Target {
   // password: string
   keyPath: string | null
   logType: "systemd" | "docker" | "docker_compose" | "file" | "custom"
+  // -- systemd
   serviceName: string
+  isUser: boolean
+  // -- docker
   containerName: string
+  // -- docker_compose
   composePath: string
+  // -- file
   logPath: string
+  // -- custom
   command: string
 }
 

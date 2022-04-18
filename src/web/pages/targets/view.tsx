@@ -36,10 +36,6 @@ export default () => {
       })
     })()
     consoleElement.addEventListener("scroll", () => {
-      if (consoleElement.classList.contains("no-disable-autoscroll")) {
-        consoleElement.classList.remove("no-disable-autoscroll")
-        return
-      }
       setAutoscroll(
         consoleElement.clientHeight +
           consoleElement.scrollTop -
@@ -55,7 +51,6 @@ export default () => {
   useEffect(() => {
     if (autoscroll) {
       const consoleElement = document.getElementById("console")!
-      consoleElement.classList.add("no-disable-autoscroll")
       consoleElement.scrollTo(0, consoleElement.scrollHeight + 100)
     }
   }, [autoscroll, message])

@@ -3,13 +3,17 @@ import { ChildProcess, spawn } from "child_process"
 export function getCommand(target: Target, lines: number) {
   switch (target.logType) {
     case "systemd":
-      return `journalctl -f -n ${lines} -u ${target.serviceName}`
+      return `journalctl -f -n ${lines} -u ${JSON.stringify(
+        target.serviceName
+      )}${target.isUser ? " --user" : ""}`
     case "docker":
-      return `docker logs -n ${lines} -f ${target.containerName}`
+      return `docker logs -n ${lines} -f ${JSON.stringify(
+        target.containerName
+      )}`
     case "docker_compose":
       return `cd ${target.composePath} && docker-compose logs -f --tail ${lines}`
     case "file":
-      return `tail -f ${target.logPath} -n ${lines}`
+      return `tail -f ${JSON.stringify(target.logPath)} -n ${lines}`
     case "custom":
       return target.command
     default:
@@ -32,10 +36,10 @@ export function spawnSsh(target: Target, logLines: number) {
   if (target.keyPath) {
     connectArgs.push(`-i${target.keyPath}`)
   }
-  const command = `echo -e "\\e[92m== Successfully connected to target.\\e[m" && ${getCommand(
-    target,
-    logLines
-  )}\n`
+  const logCommand = getCommand(target, logLines)
+  const command = `echo -e "\\e[92m== Successfully connected to target.\\e[m" && echo -e "\\e[94m==> ${JSON.stringify(
+    logCommand
+  ).replace(/^"|"$/g, "")}\\e[m" && ${logCommand}\n`
   const b64command = Buffer.from(command).toString("base64")
   const args = [
     target.host,

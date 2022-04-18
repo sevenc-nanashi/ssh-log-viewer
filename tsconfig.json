@@ -5,7 +5,8 @@
     "esModuleInterop": true,
     "moduleResolution": "Node",
     "strict": true,
-    "jsx": "react"
+    "jsx": "react",
+    "skipLibCheck": true,
   },
   "ts-node": {
     "compilerOptions": {

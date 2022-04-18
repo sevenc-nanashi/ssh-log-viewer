@@ -1,4 +1,4 @@
-import React, { useEffect } from "react"
+import React, { useEffect, useState } from "react"
 import { Link } from "react-router-dom"
 import { useNavigate, useLocation } from "react-router"
 import { generate as generateUUID } from "short-uuid"
@@ -25,23 +25,8 @@ import { APP_NAME } from "../../../constants"
 const NewTarget: React.FC<{ edit: boolean }> = ({ edit: isEdit }) => {
   const navigate = useNavigate()
   const location = useLocation()
+  const [logType, setLogType] = useState("systemd")
 
-  function showOptions(
-    className: string,
-    classPrefix: string,
-    value: string
-  ): void {
-    ;[...document.querySelectorAll(`.${classPrefix}${value}`)].forEach((e) => {
-      e.classList.remove("hidden")
-    })
-    ;[
-      ...document.querySelectorAll(
-        `.${className}:not(.${classPrefix}${value})`
-      ),
-    ].forEach((e) => {
-      e.classList.add("hidden")
-    })
-  }
   useEffect(() => {
     document.title = APP_NAME + " - New Target"
     if (location.state) {
@@ -52,10 +37,13 @@ const NewTarget: React.FC<{ edit: boolean }> = ({ edit: isEdit }) => {
             `[name="${key}"]`
           ) as HTMLInputElement | null
           if (element) {
-            element.value = value
+            if (value === true) {
+              element.checked = true
+            } else {
+              element.value = value
+            }
           }
         }
-        showOptions("log-option", "show-log-", target.logType)
       }
     }
   })
@@ -70,7 +58,7 @@ const NewTarget: React.FC<{ edit: boolean }> = ({ edit: isEdit }) => {
         ]
         let canSubmit = true
         const payload = { id: generateUUID() } as {
-          [key: string]: string | null
+          [key: string]: string | boolean | null
         }
         visibleFields.forEach((e: HTMLInputElement) => {
           if (e.value.length === 0) {
@@ -81,10 +69,15 @@ const NewTarget: React.FC<{ edit: boolean }> = ({ edit: isEdit }) => {
               canSubmit = false
             }
           } else {
-            payload[e.name] = e.value
+            if (e.getAttribute("type") === "checkbox") {
+              payload[e.name] = e.checked
+            } else {
+              payload[e.name] = e.value
+            }
             e.classList.remove("error")
           }
         })
+
         if (canSubmit) {
           if (isEdit) {
             window.electron.targets.updateTarget({
@@ -219,9 +212,9 @@ const NewTarget: React.FC<{ edit: boolean }> = ({ edit: isEdit }) => {
             className="input"
             name="logType"
             onChange={(event) => {
-              showOptions("log-option", "show-log-", event.target.value)
+              setLogType(event.target.value)
             }}
-            defaultValue="systemd"
+            defaultValue={logType}
           >
             <option value="systemd">systemd (journalctl)</option>
             <option value="docker">Docker</option>
@@ -230,62 +223,76 @@ const NewTarget: React.FC<{ edit: boolean }> = ({ edit: isEdit }) => {
             <option value="custom">Custom</option>
           </select>
         </div>
-        <div className="form-element log-option show-log-systemd">
-          <h2 className="text-xl text-blue-500">
-            <AppGenericFilled className="inline-block" /> Service name
-          </h2>
-          <p>The service name of the target.</p>
-          <input
-            name="serviceName"
-            type="text"
-            className="input font-mono"
-            placeholder="sshd"
-          />
-        </div>
-        <div className="form-element log-option show-log-docker hidden">
-          <h2 className="text-xl text-blue-500">
-            <AppsFilled className="inline-block" /> Container name
-          </h2>
-          <p>The container name of the target.</p>
-          <input
-            name="containerName"
-            className="input font-mono"
-            placeholder="my-nginx"
-          />
-        </div>
-        <div className="form-element log-option show-log-docker_compose hidden">
-          <h2 className="text-xl text-blue-500">
-            <AppFolderFilled className="inline-block" /> Project path
-          </h2>
-          <p>The path to the docker-compose project. Must be absolute.</p>
-          <input
-            name="composePath"
-            className="input font-mono"
-            placeholder="/home/ubuntu/my_web_service"
-          />
-        </div>
-        <div className="form-element log-option show-log-file hidden">
-          <h2 className="text-xl text-blue-500">
-            <DocumentOnePageFilled className="inline-block" /> File path
-          </h2>
-          <p>The path to the log file. Must be absolute.</p>
-          <input
-            name="logPath"
-            className="input font-mono"
-            placeholder="/var/log/nginx/access.log"
-          />
-        </div>
-        <div className="form-element log-option show-log-custom hidden">
-          <h2 className="text-xl text-blue-500">
-            <CodeFilled className="inline-block" /> Command
-          </h2>
-          <p>The command to run to get the logs.</p>
-          <input
-            name="command"
-            className="input font-mono"
-            placeholder="journalctl -u nginx -f"
-          />
-        </div>
+        {logType === "systemd" && (
+          <div className="form-element">
+            <h2 className="text-xl text-blue-500">
+              <AppGenericFilled className="inline-block" /> Service name
+            </h2>
+            <p>The service name of the target.</p>
+            <input
+              name="serviceName"
+              type="text"
+              className="input font-mono"
+              placeholder="sshd"
+            />
+            <label className="text-sm text-gray-500 cursor-pointer">
+              <input name="isUser" type="checkbox" /> Use <code>--user</code>{" "}
+              flag
+            </label>
+          </div>
+        )}
+        {logType === "docker" && (
+          <div className="form-element">
+            <h2 className="text-xl text-blue-500">
+              <AppsFilled className="inline-block" /> Container name
+            </h2>
+            <p>The container name of the target.</p>
+            <input
+              name="containerName"
+              className="input font-mono"
+              placeholder="my-nginx"
+            />
+          </div>
+        )}
+        {logType === "docker_compose" && (
+          <div className="form-element">
+            <h2 className="text-xl text-blue-500">
+              <AppFolderFilled className="inline-block" /> Project path
+            </h2>
+            <p>The path to the docker-compose project. Must be absolute.</p>
+            <input
+              name="composePath"
+              className="input font-mono"
+              placeholder="/home/ubuntu/my_web_service"
+            />
+          </div>
+        )}
+        {logType === "file" && (
+          <div className="form-element">
+            <h2 className="text-xl text-blue-500">
+              <DocumentOnePageFilled className="inline-block" /> File path
+            </h2>
+            <p>The path to the log file. Must be absolute.</p>
+            <input
+              name="logPath"
+              className="input font-mono"
+              placeholder="/var/log/nginx/access.log"
+            />
+          </div>
+        )}
+        {logType === "custom" && (
+          <div className="form-element">
+            <h2 className="text-xl text-blue-500">
+              <CodeFilled className="inline-block" /> Command
+            </h2>
+            <p>The command to run to get the logs.</p>
+            <input
+              name="command"
+              className="input font-mono"
+              placeholder="journalctl -u nginx -f"
+            />
+          </div>
+        )}
         <div className="flex flex-row justify-end mt-4">
           <p className="hidden text-red-500 mt-2" id="error-message">
             Please fill out all fields.

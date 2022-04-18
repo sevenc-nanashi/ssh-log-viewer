@@ -78,7 +78,7 @@ const createWindow = () => {
         id: target.id,
         status: "progress",
         step: "connect",
-        message: `== ${getProcessCommand(ssh)}\n`.brightCyan,
+        message: `==> ${getProcessCommand(ssh)}\n`.brightBlue,
       } as TargetValidationProgress)
       const processData = (data: string) => {
         buffer += data.toString()
@@ -198,7 +198,7 @@ const createWindow = () => {
       const ssh = spawnSsh(target, 10)
       mainWindow.webContents.send("targets:onLogUpdated", {
         id: target.id,
-        message: `== ${getProcessCommand(ssh)}\n`.brightCyan,
+        message: `==> ${getProcessCommand(ssh)}\n`.brightCyan,
       })
       const processData = (data: string) => {
         logs.set(target.id, logs.get(target.id) + data.toString())
