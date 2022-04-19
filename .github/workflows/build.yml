@@ -143,8 +143,8 @@ jobs:
       - name: Upload release
         uses: softprops/action-gh-release@v1
         with:
-          name: ${{ github.ref_name || "head" }}
-          prerelease: ${{ (github.ref_name && true) || false }}
-          tag_name: ${{ github.ref_name || "head" }}
+          name: ${{ github.ref_name || 'head' }}
+          prerelease: ${{ !!github.ref_name }}
+          tag_name: ${{ github.ref_name || 'head' }}
           files: build/*
 
