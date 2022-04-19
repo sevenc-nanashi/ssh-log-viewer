@@ -27,6 +27,8 @@ jobs:
         with:
           path: "**/node_modules"
           key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('./yarn.lock') }}
+          restoreKeys:
+            - ${{ runner.os }}-build-${{ env.cache-name }}-*
 
       - name: Install dependencies
         if: steps.cache-node_modules.outputs.cache-hit != 'true'
