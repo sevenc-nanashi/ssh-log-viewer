@@ -13,3 +13,4 @@ mac:
 
 extraMetadata:
   main: "./dist/main.js"
+publish: never
