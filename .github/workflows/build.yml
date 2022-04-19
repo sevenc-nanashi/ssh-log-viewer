@@ -18,23 +18,24 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: "16"
-
-      - name: Install yarn
-        run: npm install -g yarn
-
-      - name: Install dependencies
-        run: yarn install
+          cache: yarn
 
       - uses: actions/cache@v3
-        id: node_modules_cache_id
+        id: cache-node_modules
         env:
           cache-name: cache-node-modules
         with:
           path: "**/node_modules"
           key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('./yarn.lock') }}
 
+      - name: Install dependencies
+        if: steps.cache-node_modules.outputs.cache-hit != 'true'
+        run: yarn install
+
       - name: Build
-        run: yarn build:electron:win
+        run: |
+          yarn build:webpack
+          yarn build:electron:win
 
       - name: Upload
         uses: actions/upload-artifact@v3
@@ -53,23 +54,24 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: "16"
-
-      - name: Install yarn
-        run: npm install -g yarn
-
-      - name: Install dependencies
-        run: yarn install
+          cache: yarn
 
       - uses: actions/cache@v3
-        id: node_modules_cache_id
+        id: cache-node_modules
         env:
           cache-name: cache-node-modules
         with:
           path: "**/node_modules"
           key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('./yarn.lock') }}
 
+      - name: Install dependencies
+        if: steps.cache-node_modules.outputs.cache-hit != 'true'
+        run: yarn install
+
       - name: Build
-        run: yarn build:electron:mac
+        run: |
+          yarn build:webpack
+          yarn build:electron:mac
 
       - name: Upload
         uses: actions/upload-artifact@v3
@@ -88,23 +90,24 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: "16"
-
-      - name: Install yarn
-        run: npm install -g yarn
-
-      - name: Install dependencies
-        run: yarn install
+          cache: yarn
 
       - uses: actions/cache@v3
-        id: node_modules_cache_id
+        id: cache-node_modules
         env:
           cache-name: cache-node-modules
         with:
           path: "**/node_modules"
           key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('./yarn.lock') }}
 
+      - name: Install dependencies
+        if: steps.cache-node_modules.outputs.cache-hit != 'true'
+        run: yarn install
+
       - name: Build
-        run: yarn build:electron:linux
+        run: |
+          yarn build:webpack
+          yarn build:electron:linux
 
       - name: Upload
         uses: actions/upload-artifact@v3
