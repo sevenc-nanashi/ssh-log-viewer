@@ -16,7 +16,10 @@
     "prebuild": "rimraf dist build",
     "build": "run-s build:webpack build:electron",
     "build:webpack": "cross-env NODE_ENV=\"production\" webpack --progress",
-    "build:electron": "cross-env NODE_ENV=\"production\" electron-builder --win --x64"
+    "build:electron": "cross-env NODE_ENV=\"production\" electron-builder",
+    "build:electron:win": "cross-env NODE_ENV=\"production\" electron-builder --win --x64",
+    "build:electron:mac": "cross-env NODE_ENV=\"production\" electron-builder --mac --x64",
+    "build:electron:linux": "cross-env NODE_ENV=\"production\" electron-builder --linux --x64"
   },
   "devDependencies": {
     "@colors/colors": "^1.5.0",

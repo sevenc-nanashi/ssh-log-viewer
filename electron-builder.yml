@@ -8,6 +8,8 @@ directories:
 win:
   target: [ "nsis", "portable" ]
   publisherName: "Nanashi. (@sevenc-nanashi, sevenc7c.com)"
+mac:
+  target: [ "dmg" ]
 
 extraMetadata:
   main: "./dist/main.js"
