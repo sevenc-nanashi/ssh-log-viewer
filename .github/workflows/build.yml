@@ -23,12 +23,10 @@ jobs:
       - uses: actions/cache@v3
         id: cache-node_modules
         env:
-          cache-name: cache-node-modules
+          cache-name: cache-node_modules
         with:
           path: "**/node_modules"
           key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('./yarn.lock') }}
-          restoreKeys:
-            - ${{ runner.os }}-build-${{ env.cache-name }}-*
 
       - name: Install dependencies
         if: steps.cache-node_modules.outputs.cache-hit != 'true'
