@@ -4,7 +4,7 @@ on:
     tags:
       - "v*"
     paths:
-      - ".github/workflow/build.yml"
+      - ".github/workflows/build.yml"
   workflow_dispatch:
 
 jobs:
