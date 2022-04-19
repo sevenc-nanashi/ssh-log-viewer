@@ -17,9 +17,9 @@
     "build": "run-s build:webpack build:electron",
     "build:webpack": "cross-env NODE_ENV=\"production\" webpack --progress",
     "build:electron": "cross-env NODE_ENV=\"production\" electron-builder",
-    "build:electron:win": "cross-env NODE_ENV=\"production\" electron-builder --win --x64",
-    "build:electron:mac": "cross-env NODE_ENV=\"production\" electron-builder --mac --x64",
-    "build:electron:linux": "cross-env NODE_ENV=\"production\" electron-builder --linux --x64"
+    "build:electron:win": "cross-env NODE_ENV=\"production\" electron-builder --win --x64 -p never",
+    "build:electron:mac": "cross-env NODE_ENV=\"production\" electron-builder --mac --x64 -p never",
+    "build:electron:linux": "cross-env NODE_ENV=\"production\" electron-builder --linux --x64 -p never"
   },
   "devDependencies": {
     "@colors/colors": "^1.5.0",
