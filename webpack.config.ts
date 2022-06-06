@@ -42,8 +42,15 @@ const common: Configuration = {
       },
       {
         test: /\.(ico|png|jpe?g|svg|eot|woff?2?)$/,
-
-        type: "asset/resource",
+        use: [
+          {
+            loader: "file-loader",
+            options: {
+              context: "src",
+              name: "[path][name].[ext]",
+            },
+          },
+        ],
       },
     ],
   },
