@@ -8,8 +8,63 @@ on:
   workflow_dispatch:
 
 jobs:
-  build_win:
-    runs-on: windows-latest
+  build_webpack:
+    runs-on: ubuntu-latest
+    jobs:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Install node
+        uses: actions/setup-node@v3
+        with:
+          node-version: "16"
+          cache: yarn
+
+      - uses: actions/cache@v3
+        id: cache-node_modules
+        env:
+          cache-name: cache-node_modules
+        with:
+          path: "**/node_modules"
+          key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('./yarn.lock') }}
+
+      - name: Install dependencies
+        if: steps.cache-node_modules.outputs.cache-hit != 'true'
+        run: yarn install
+      
+      - name: Build
+        run: yarn build:webpack
+      
+      - name: Upload build
+        uses: actions/upload-artifact@v3
+        path: |
+          dist/
+
+  build_bin:
+    needs:
+      - build_webpack
+    strategy:
+      matrix:
+        os:
+          - ubuntu-latest
+          - macos-latest
+          - windows-latest
+        include:
+          - os: ubuntu-latest
+            task: "build:electron:linux"
+            dist_path: |
+              build/SSH Log Viewer*.AppImage
+          - os: macos-latest
+            task: "build:electron:mac"
+            dist_path: |
+              build/SSH Log Viewer*.dmg
+          - os: windows-latest
+            task: "build:electron:win"
+            dist_path: |
+              build/SSH Log Viewer*.exe
+              build/SSH Log Viewer*.AppImage
+
+    runs-on: ${{ matrix.os }}
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
@@ -32,89 +87,23 @@ jobs:
         if: steps.cache-node_modules.outputs.cache-hit != 'true'
         run: yarn install
 
+      - name: Download webpacked code
+        uses: actions/download-artifact@v3
+        with:
+          name: slv-webpack
+          path: |
+            dist/
+
       - name: Build
         run: |
-          yarn build:webpack
-          yarn build:electron:win
+          yarn ${{ matrix.task }}
 
       - name: Upload
         uses: actions/upload-artifact@v3
         with:
-          name: electron-builder-win
+          name: slv-${{ matrix.os }}
           path: |
-            build/SSH Log Viewer*.exe
-
-  build_mac:
-    runs-on: macos-latest
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v3
-
-      - name: Install node
-        uses: actions/setup-node@v3
-        with:
-          node-version: "16"
-          cache: yarn
-
-      - uses: actions/cache@v3
-        id: cache-node_modules
-        env:
-          cache-name: cache-node-modules
-        with:
-          path: "**/node_modules"
-          key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('./yarn.lock') }}
-
-      - name: Install dependencies
-        if: steps.cache-node_modules.outputs.cache-hit != 'true'
-        run: yarn install
-
-      - name: Build
-        run: |
-          yarn build:webpack
-          yarn build:electron:mac
-
-      - name: Upload
-        uses: actions/upload-artifact@v3
-        with:
-          name: electron-builder-mac
-          path: |
-            build/SSH Log Viewer*.dmg
-
-  build_linux:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v3
-
-      - name: Install node
-        uses: actions/setup-node@v3
-        with:
-          node-version: "16"
-          cache: yarn
-
-      - uses: actions/cache@v3
-        id: cache-node_modules
-        env:
-          cache-name: cache-node-modules
-        with:
-          path: "**/node_modules"
-          key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('./yarn.lock') }}
-
-      - name: Install dependencies
-        if: steps.cache-node_modules.outputs.cache-hit != 'true'
-        run: yarn install
-
-      - name: Build
-        run: |
-          yarn build:webpack
-          yarn build:electron:linux
-
-      - name: Upload
-        uses: actions/upload-artifact@v3
-        with:
-          name: electron-builder-linux
-          path: |
-            build/SSH Log Viewer*.AppImage
+            ${{ matrix.dist_path }}
 
   upload_release:
     runs-on: ubuntu-latest
@@ -128,19 +117,19 @@ jobs:
       - name: Download windows package
         uses: actions/download-artifact@v3
         with:
-          name: electron-builder-win
+          name: slv-windows-latest
           path: |
             build/
       - name: Download mac package
         uses: actions/download-artifact@v3
         with:
-          name: electron-builder-mac
+          name: slv-macos-latest
           path: |
             build/
       - name: Download linux package
         uses: actions/download-artifact@v3
         with:
-          name: electron-builder-linux
+          name: slv-ubuntu-latest
           path: |
             build/
       - name: Upload release
