@@ -110,9 +110,7 @@ jobs:
   upload_release:
     runs-on: ubuntu-latest
     needs:
-      - build_linux
-      - build_mac
-      - build_win
+      - build_bin
     steps:
       - name: Make directory
         run: mkdir -p release
