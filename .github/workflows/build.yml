@@ -10,7 +10,7 @@ on:
 jobs:
   build_webpack:
     runs-on: ubuntu-latest
-    jobs:
+    steps:
       - name: Checkout repository
         uses: actions/checkout@v3
 
@@ -31,10 +31,10 @@ jobs:
       - name: Install dependencies
         if: steps.cache-node_modules.outputs.cache-hit != 'true'
         run: yarn install
-      
+
       - name: Build
         run: yarn build:webpack
-      
+
       - name: Upload build
         uses: actions/upload-artifact@v3
         path: |
