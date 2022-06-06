@@ -3,7 +3,7 @@
   "productName": "SSH Log Viewer",
   "description": "View Logs over SSH.",
   "author": "Nanashi. (@sevenc-nanashi, sevenc7c.com)",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "license": "MIT",
   "main": "dist/main.js",
   "scripts": {
