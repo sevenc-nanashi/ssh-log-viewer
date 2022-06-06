@@ -1,5 +1,11 @@
 import path from "path"
-import { BrowserWindow, app, ipcMain, IpcMainInvokeEvent } from "electron"
+import {
+  BrowserWindow,
+  app,
+  ipcMain,
+  IpcMainInvokeEvent,
+  shell,
+} from "electron"
 import Store from "electron-store"
 import { getCommand, getProcessCommand, sleep, spawnSsh } from "./utils"
 import "@colors/colors"
@@ -32,6 +38,10 @@ const createWindow = () => {
   if (process.env.NODE_ENV === "development") {
     mainWindow.webContents.openDevTools()
   }
+  mainWindow.webContents.setWindowOpenHandler(({ url }) => {
+    shell.openExternal(url)
+    return { action: "deny" }
+  })
 
   // レンダラープロセスをロード
   mainWindow.loadFile("dist/index.html")

@@ -1,6 +1,9 @@
 import React, { useEffect, useState } from "react"
 import { Link, useNavigate } from "react-router-dom"
 
+import Icon from "@mdi/react"
+import { mdiGithub } from "@mdi/js"
+
 import {
   DeleteRegular,
   EditRegular,
@@ -241,6 +244,19 @@ const TargetList: React.FC<{
         <ListFilled className="inline-block" /> Targets
       </h1>
       <div className="flex flex-col mt-4">{content}</div>
+      <div className="w-full flex justify-center border-t-2 pt-4 border-slate-200 text-slate-500">
+        <div className="text-center">
+          SSH Log Viewer - v{VERSION}
+          <br />
+          <a
+            href="https://github.com/sevenc-nanashi/ssh-log-viewer"
+            target="_blank"
+          >
+            <Icon path={mdiGithub} size={1} className="inline" />{" "}
+            <span className="underline">sevenc-nanashi/ssh-log-viewer</span>
+          </a>
+        </div>
+      </div>
     </>
   )
 }

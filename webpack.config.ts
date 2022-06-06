@@ -1,6 +1,6 @@
 import path from "path"
 
-import { Configuration } from "webpack"
+import { Configuration, DefinePlugin } from "webpack"
 
 import HtmlWebpackPlugin from "html-webpack-plugin"
 import MiniCssExtractPlugin from "mini-css-extract-plugin"
@@ -80,6 +80,9 @@ const renderer: Configuration = {
       template: "./src/web/index.html",
     }),
     new OptimizeCSSAssetsPlugin(),
+    new DefinePlugin({
+      VERSION: JSON.stringify(process.env.npm_package_version),
+    }),
   ],
 }
 
