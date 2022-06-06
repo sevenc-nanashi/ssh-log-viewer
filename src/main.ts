@@ -26,6 +26,7 @@ const createWindow = () => {
     webPreferences: {
       preload: path.resolve(__dirname, "preload.js"),
     },
+    icon: path.resolve(__dirname, "../asset/icon_window.png"),
   })
   mainWindow.removeMenu()
   if (process.env.NODE_ENV === "development") {

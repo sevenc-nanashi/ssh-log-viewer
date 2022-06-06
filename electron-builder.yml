@@ -8,8 +8,11 @@ directories:
 win:
   target: [ "nsis", "portable" ]
   publisherName: "Nanashi. (@sevenc-nanashi, sevenc7c.com)"
+  icon: "./asset/icon.png"
 mac:
   target: [ "dmg" ]
-
+  icon: "./asset/icon.png"
+extraResources:
+  - ./asset/icon.png
 extraMetadata:
   main: "./dist/main.js"
