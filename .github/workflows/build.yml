@@ -137,6 +137,6 @@ jobs:
         with:
           name: ${{ (startsWith(github.ref_name, 'v') && github.ref_name) || 'head' }}
           prerelease: ${{ !startsWith(github.ref_name, 'v') }}
-          tag_name: ${{ (startsWith(github.ref_name, 'v') && github.ref_name) || 'head' }}
+          tag_name: ${{ (startsWith(github.ref_name, 'v') && github.ref_name) || 'tag-head' }}
           files: build/*
 
