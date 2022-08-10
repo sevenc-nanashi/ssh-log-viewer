@@ -11,7 +11,9 @@ export function getCommand(target: Target, lines: number) {
         target.containerName
       )}`
     case "docker_compose":
-      return `cd ${target.composePath} && docker-compose logs -f --tail ${lines}`
+      return `cd ${target.composePath} && ${
+        target.useOldCompose ? "docker-compose" : "docker compose"
+      } logs -f --tail ${lines}`
     case "file":
       return `tail -f ${JSON.stringify(target.logPath)} -n ${lines}`
     case "custom":

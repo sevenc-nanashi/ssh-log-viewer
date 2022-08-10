@@ -15,6 +15,7 @@ interface Target {
   containerName: string
   // -- docker_compose
   composePath: string
+  useOldCompose: boolean
   // -- file
   logPath: string
   // -- custom

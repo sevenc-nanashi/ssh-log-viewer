@@ -257,6 +257,9 @@ const NewTarget: React.FC<{ edit: boolean }> = ({ edit: isEdit }) => {
               placeholder="/home/ubuntu/my_web_service"
               value={target && target.composePath}
             />
+            <label className="text-sm text-gray-500 cursor-pointer">
+              <input name="useOldCompose" type="checkbox" value={target && target.useOldCompose.toString()} /> Use <code>docker-compose</code> instead of <code>docker compose</code>
+            </label>
           </div>
         )}
         {logType === "file" && (

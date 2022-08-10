@@ -9,8 +9,9 @@ import {
 import Store from "electron-store"
 import { getCommand, getProcessCommand, sleep, spawnSsh } from "./utils"
 import "@colors/colors"
+import { migrateStore, StoreContent } from "./store"
 
-const store = new Store()
+const store = new Store<StoreContent>()
 const activeSessions = new Set<string>()
 const activeSessionResolvers = new Map<string, () => void>()
 const logs = new Map<string, string>()
@@ -51,9 +52,6 @@ const createWindow = () => {
   mainWindow.loadFile("dist/index.html")
 
   ipcMain.handle("targets:list", (_event: IpcMainInvokeEvent): Target[] => {
-    if (!store.has("targets")) {
-      store.set("targets", [])
-    }
     return store.get("targets") as Target[]
   })
 
@@ -269,6 +267,8 @@ const createWindow = () => {
       return Array.from(activeSessions)
     }
   )
+
+  migrateStore(store)
 }
 
 // アプリの起動イベント発火で上の関数を実行
