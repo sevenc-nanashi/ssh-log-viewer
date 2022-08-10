@@ -75,6 +75,11 @@ const preload: Configuration = {
   },
 }
 
+let version = process.env.npm_package_version
+if (isDev) {
+  version += "-dev"
+}
+
 const renderer: Configuration = {
   ...common,
   target: "web",
@@ -86,11 +91,14 @@ const renderer: Configuration = {
     new HtmlWebpackPlugin({
       template: "./src/web/index.html",
     }),
-    new OptimizeCSSAssetsPlugin(),
     new DefinePlugin({
-      VERSION: JSON.stringify(process.env.npm_package_version),
+      VERSION: JSON.stringify(version),
     }),
   ],
+}
+
+if (!isDev) {
+  renderer.plugins?.push(new OptimizeCSSAssetsPlugin())
 }
 
 const config = isDev ? [renderer] : [main, preload, renderer]

@@ -9,7 +9,6 @@ import {
 import Store from "electron-store"
 import { getCommand, getProcessCommand, sleep, spawnSsh } from "./utils"
 import "@colors/colors"
-import "./asset/icon.png"
 
 const store = new Store()
 const activeSessions = new Set<string>()
@@ -29,11 +28,15 @@ if (process.env.NODE_ENV === "development") {
 }
 
 const createWindow = () => {
+  let icon = path.resolve(__dirname, "asset/icon.png")
+  if (process.env.NODE_ENV === "development") {
+    icon = path.resolve(__dirname, "../src/asset/icon.png")
+  }
   const mainWindow = new BrowserWindow({
     webPreferences: {
       preload: path.resolve(__dirname, "preload.js"),
     },
-    icon: path.resolve(__dirname, "asset/icon.png"),
+    icon,
   })
   mainWindow.removeMenu()
   if (process.env.NODE_ENV === "development") {

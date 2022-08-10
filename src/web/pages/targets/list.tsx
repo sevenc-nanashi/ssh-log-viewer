@@ -60,7 +60,19 @@ const TargetList: React.FC<{
   if (state.isLoading) {
     // Loading
     content = (
-      <div className="flex flex-col text-xl text-blue-200">Loading...</div>
+      <div className="flex flex-row flex-wrap animate-pulse">
+        {[...Array(6)].map((_, i) => (
+          <Card key={i} background={"bg-blue-50 dark:bg-blue-950"}>
+            <div className="flex-row justify-between relative mb-8 opacity-0">
+              <div className="">dummy</div>
+              <div className="opacity-50 text-xs">dummy</div>
+            </div>
+            <div className="button-primary opacity-50 p-2 relative self-end text-white text-center cursor-pointer">
+              <PlugConnectedFilled className="inline-block opacity-0" />
+            </div>
+          </Card>
+        ))}
+      </div>
     )
   } else if (state.targets.length === 0) {
     // No targets
