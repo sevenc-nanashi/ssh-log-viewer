@@ -25,27 +25,12 @@ import { APP_NAME } from "../../../constants"
 const NewTarget: React.FC<{ edit: boolean }> = ({ edit: isEdit }) => {
   const navigate = useNavigate()
   const location = useLocation()
-  const [logType, setLogType] = useState("systemd")
+  const { target } = (location.state || { target: undefined }) as { target: Target | undefined }
+  const [logType, setLogType] = useState(target ? target.logType : "systemd")
+
 
   useEffect(() => {
     document.title = APP_NAME + " - New Target"
-    if (location.state) {
-      const { target } = location.state as { target: Target | undefined }
-      if (target) {
-        for (const [key, value] of Object.entries(target)) {
-          const element = document.querySelector(
-            `[name="${key}"]`
-          ) as HTMLInputElement | null
-          if (element) {
-            if (value === true) {
-              element.checked = true
-            } else {
-              element.value = value
-            }
-          }
-        }
-      }
-    }
   })
   return (
     <form
@@ -115,7 +100,7 @@ const NewTarget: React.FC<{ edit: boolean }> = ({ edit: isEdit }) => {
           <p>
             The name of the target. This will be shown in the list of targets.
           </p>
-          <input name="name" className="input" placeholder="My Website" />
+          <input name="name" className="input" placeholder="My Website" value={target && target.name} />
         </div>
         <div className="form-element">
           <h2 className="text-xl text-blue-500">
@@ -126,6 +111,7 @@ const NewTarget: React.FC<{ edit: boolean }> = ({ edit: isEdit }) => {
             name="host"
             className="input font-mono"
             placeholder="127.0.0.1"
+            value={target && target.host}
           />
         </div>
         <div className="form-element optional">
@@ -138,6 +124,7 @@ const NewTarget: React.FC<{ edit: boolean }> = ({ edit: isEdit }) => {
             className="input font-mono"
             placeholder="22"
             defaultValue="22"
+            value={target && target.port || undefined}
           />
         </div>
         <div className="form-element optional">
@@ -149,6 +136,7 @@ const NewTarget: React.FC<{ edit: boolean }> = ({ edit: isEdit }) => {
             name="username"
             className="input font-mono"
             placeholder="ubuntu"
+            value={target && target.username || undefined}
           />
         </div>
         {/* <div className="form-element">
@@ -201,6 +189,7 @@ const NewTarget: React.FC<{ edit: boolean }> = ({ edit: isEdit }) => {
             name="keyPath"
             className="input font-mono"
             placeholder="~/.ssh/id_rsa"
+            value={target && target.keyPath || undefined}
           />
         </div>
         <div className="form-element">
@@ -212,9 +201,9 @@ const NewTarget: React.FC<{ edit: boolean }> = ({ edit: isEdit }) => {
             className="input"
             name="logType"
             onChange={(event) => {
-              setLogType(event.target.value)
+              setLogType(event.target.value as "systemd" | "docker" | "docker_compose" | "file" | "custom")
             }}
-            defaultValue={logType}
+            value={logType}
           >
             <option value="systemd">systemd (journalctl)</option>
             <option value="docker">Docker</option>
@@ -234,9 +223,10 @@ const NewTarget: React.FC<{ edit: boolean }> = ({ edit: isEdit }) => {
               type="text"
               className="input font-mono"
               placeholder="sshd"
+              value={target && target.serviceName}
             />
             <label className="text-sm text-gray-500 cursor-pointer">
-              <input name="isUser" type="checkbox" /> Use <code>--user</code>{" "}
+              <input name="isUser" type="checkbox" value={target && target.isUser.toString()} /> Use <code>--user</code>{" "}
               flag
             </label>
           </div>
@@ -251,6 +241,7 @@ const NewTarget: React.FC<{ edit: boolean }> = ({ edit: isEdit }) => {
               name="containerName"
               className="input font-mono"
               placeholder="my-nginx"
+              value={target && target.containerName}
             />
           </div>
         )}
@@ -264,6 +255,7 @@ const NewTarget: React.FC<{ edit: boolean }> = ({ edit: isEdit }) => {
               name="composePath"
               className="input font-mono"
               placeholder="/home/ubuntu/my_web_service"
+              value={target && target.composePath}
             />
           </div>
         )}
@@ -277,6 +269,7 @@ const NewTarget: React.FC<{ edit: boolean }> = ({ edit: isEdit }) => {
               name="logPath"
               className="input font-mono"
               placeholder="/var/log/nginx/access.log"
+              value={target && target.logPath}
             />
           </div>
         )}
@@ -290,6 +283,7 @@ const NewTarget: React.FC<{ edit: boolean }> = ({ edit: isEdit }) => {
               name="command"
               className="input font-mono"
               placeholder="journalctl -u nginx -f"
+              value={target && target.command}
             />
           </div>
         )}
