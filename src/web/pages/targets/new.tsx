@@ -100,7 +100,7 @@ const NewTarget: React.FC<{ edit: boolean }> = ({ edit: isEdit }) => {
           <p>
             The name of the target. This will be shown in the list of targets.
           </p>
-          <input name="name" className="input" placeholder="My Website" value={target && target.name} />
+          <input name="name" className="input" placeholder="My Website" defaultValue={target && target.name} />
         </div>
         <div className="form-element">
           <h2 className="text-xl text-blue-500">
@@ -111,7 +111,7 @@ const NewTarget: React.FC<{ edit: boolean }> = ({ edit: isEdit }) => {
             name="host"
             className="input font-mono"
             placeholder="127.0.0.1"
-            value={target && target.host}
+            defaultValue={target && target.host}
           />
         </div>
         <div className="form-element optional">
@@ -123,8 +123,7 @@ const NewTarget: React.FC<{ edit: boolean }> = ({ edit: isEdit }) => {
             name="port"
             className="input font-mono"
             placeholder="22"
-            defaultValue="22"
-            value={target && target.port || undefined}
+            defaultValue={target && target.port || "22"}
           />
         </div>
         <div className="form-element optional">
@@ -136,7 +135,7 @@ const NewTarget: React.FC<{ edit: boolean }> = ({ edit: isEdit }) => {
             name="username"
             className="input font-mono"
             placeholder="ubuntu"
-            value={target && target.username || undefined}
+            defaultValue={target && target.username || undefined}
           />
         </div>
         {/* <div className="form-element">
@@ -189,7 +188,7 @@ const NewTarget: React.FC<{ edit: boolean }> = ({ edit: isEdit }) => {
             name="keyPath"
             className="input font-mono"
             placeholder="~/.ssh/id_rsa"
-            value={target && target.keyPath || undefined}
+            defaultValue={target && target.keyPath || undefined}
           />
         </div>
         <div className="form-element">
@@ -203,7 +202,7 @@ const NewTarget: React.FC<{ edit: boolean }> = ({ edit: isEdit }) => {
             onChange={(event) => {
               setLogType(event.target.value as "systemd" | "docker" | "docker_compose" | "file" | "custom")
             }}
-            value={logType}
+            defaultValue={logType}
           >
             <option value="systemd">systemd (journalctl)</option>
             <option value="docker">Docker</option>
@@ -223,10 +222,10 @@ const NewTarget: React.FC<{ edit: boolean }> = ({ edit: isEdit }) => {
               type="text"
               className="input font-mono"
               placeholder="sshd"
-              value={target && target.serviceName}
+              defaultValue={target && target.serviceName}
             />
             <label className="text-sm text-gray-500 cursor-pointer">
-              <input name="isUser" type="checkbox" value={target && target.isUser.toString()} /> Use <code>--user</code>{" "}
+              <input name="isUser" type="checkbox" defaultChecked={target && target.isUser} /> Use <code>--user</code>{" "}
               flag
             </label>
           </div>
@@ -241,7 +240,7 @@ const NewTarget: React.FC<{ edit: boolean }> = ({ edit: isEdit }) => {
               name="containerName"
               className="input font-mono"
               placeholder="my-nginx"
-              value={target && target.containerName}
+              defaultValue={target && target.containerName}
             />
           </div>
         )}
@@ -255,10 +254,10 @@ const NewTarget: React.FC<{ edit: boolean }> = ({ edit: isEdit }) => {
               name="composePath"
               className="input font-mono"
               placeholder="/home/ubuntu/my_web_service"
-              value={target && target.composePath}
+              defaultValue={target && target.composePath}
             />
             <label className="text-sm text-gray-500 cursor-pointer">
-              <input name="useOldCompose" type="checkbox" value={target && target.useOldCompose.toString()} /> Use <code>docker-compose</code> instead of <code>docker compose</code>
+              <input name="useOldCompose" type="checkbox" defaultChecked={target && target.useOldCompose} /> Use <code>docker-compose</code> instead of <code>docker compose</code>
             </label>
           </div>
         )}
@@ -272,7 +271,7 @@ const NewTarget: React.FC<{ edit: boolean }> = ({ edit: isEdit }) => {
               name="logPath"
               className="input font-mono"
               placeholder="/var/log/nginx/access.log"
-              value={target && target.logPath}
+              defaultValue={target && target.logPath}
             />
           </div>
         )}
@@ -286,7 +285,7 @@ const NewTarget: React.FC<{ edit: boolean }> = ({ edit: isEdit }) => {
               name="command"
               className="input font-mono"
               placeholder="journalctl -u nginx -f"
-              value={target && target.command}
+              defaultValue={target && target.command}
             />
           </div>
         )}
